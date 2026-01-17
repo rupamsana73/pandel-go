@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PANDEL GO | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+    margin:0;
+    background:#0b0f14;
+    font-family:Poppins,sans-serif;
+    color:white;
+}
+
+.header{
+    padding:20px 30px;
+    background:#0e1218;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header h2{margin:0;}
+
+.logout a{
+    color:#ff4d4d;
+    text-decoration:none;
+    border:1px solid #ff4d4d;
+    padding:6px 16px;
+    border-radius:20px;
+}
+
+.container{
+    padding:25px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:linear-gradient(135deg,#0f172a,#020617);
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 0 25px rgba(0,210,255,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 0 35px rgba(0,210,255,.25);
+}
+
+.btn{
+    margin-top:15px;
+    display:inline-block;
+    padding:10px 22px;
+    background:#00d2ff;
+    color:black;
+    border-radius:25px;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.stat{
+    font-size:34px;
+    font-weight:700;
+    color:#00d2ff;
+}
+
+.sub{
+    opacity:.8;
+}
+.fav-card{
+  max-height:240px;
+  overflow-y:auto;
+  margin-top:10px;
+  padding-right:5px;
+}
+
+.fav-item{
+  margin-bottom:15px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.go-btn{
+  margin-top:6px;
+  padding:4px 10px;
+  border-radius:8px;
+  border:none;
+  background:#00f0ff;
+  color:black;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.go-btn:hover{
+  background:#00c0cc;
+}
+
+.fav-card::-webkit-scrollbar{
+  width:4px;
+}
+.fav-card::-webkit-scrollbar-thumb{
+  background:#00f0ff;
+  border-radius:10px;
+}
+.guide-btn{
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0,198,255,0.4);
+  transition: all 0.3s ease;
+}
+
+.guide-btn:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 18px rgba(0,198,255,0.8);
+}
+
+.guide-btn:active{
+  transform: scale(0.97);
+}
+
+.chatbot-panel{
+  position:fixed;
+  right:-380px;
+  top:0;
+  width:360px;
+  height:100%;
+  background:#0b132b;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.5);
+  transition:.4s;
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+}
+
+.chatbot-panel.show{
+  right:0;
+}
+
+.chatbot-header{
+  padding:15px;
+  background:#111;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+}
+
+.chat-body{
+  flex:1;
+  padding:10px;
+  overflow-y:auto;
+}
+
+.chat-user{
+  background:#1fa2ff;
+  color:white;
+  padding:8px 12px;
+  border-radius:12px;
+  margin:6px 0;
+  text-align:right;
+  max-width:80%;
+  margin-left:auto;
+}
+
+.chat-bot{
+  background:#222;
+  color:white;
+  padding:8px 12px;
+  border-radius:12px;
+  margin:6px 0;
+  max-width:80%;
+}
+
+.chat-input{
+  display:flex;
+  padding:10px;
+  border-top:1px solid #222;
+}
+
+.chat-input input{
+  flex:1;
+  padding:8px;
+  border-radius:20px;
+  border:none;
+  outline:none;
+}
+
+.chat-input button{
+  margin-left:8px;
+  padding:8px 15px;
+  border:none;
+  border-radius:20px;
+  background:#1fa2ff;
+  color:white;
+  cursor:pointer;
+}
+.chatbot-panel{
+  position:fixed;
+  right:-380px;
+  top:0;
+  width:360px;
+  height:100%;
+  background:#0b132b;
+  transition: right 0.4s ease;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+}
+
+.chatbot-panel.show{
+  right:0;
+}
+/* ===== COMMON ===== */
+        body{
+          margin:0;
+          font-family:Arial, sans-serif;
+          background:#0e1218;
+          color:white;
+        }
+
+        button{
+          min-height:38px;
+          font-size:14px;
+          border-radius:10px;
+        }
+
+        input,select,textarea{
+          border-radius:10px;
+          padding:8px;
+          font-size:14px;
+        }
+
+        #map{
+          width:100%;
+          height:100vh;
+        }
+
+        .topbar{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:10px;
+          background:#0b0f14;
+          box-shadow:0 0 10px rgba(0,255,255,.3);
+        }
+
+        .title{font-size:16px;font-weight:700;}
+
+        .user-avatar{
+          width:34px;height:34px;border-radius:50%;
+          background:#00ff99;display:flex;
+          align-items:center;justify-content:center;
+          color:black;font-weight:bold;
+        }
+
+        #searchBox{width:260px;}
+
+        .route-info{
+          background:#0b0f14;
+          padding:12px;border-radius:14px;
+          box-shadow:0 0 10px rgba(0,255,255,.3);
+          font-size:14px;
+        }
+
+        .leaflet-popup-content{
+          max-height:250px;
+          overflow-y:auto;
+        }
+
+        @media(max-width:768px){
+          .topbar{flex-wrap:wrap;text-align:center;gap:6px;}
+          .title{width:100%;font-size:14px;}
+          .top-actions{width:100%;display:flex;justify-content:center;gap:10px;}
+          #searchBox{width:85% !important;top:70px;}
+          .route-info{font-size:13px;max-width:90%;}
+          button{width:100%;}
+        }
+
+        @media(min-width:769px){
+          .topbar{padding:12px 30px;}
+          .title{font-size:18px;}
+          .route-info{font-size:15px;}
+          #searchBox{width:300px;}
+        }
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  
+    <h2>Hello {{ request.user.username }} 👋</h2>
+    <div class="logout"><a href="{% url 'logout' %}">Logout</a></div>
+
+    
+
+</div>
+
+<div class="container">
+
+    <!-- Map -->
+    <div class="card">
+        <h3>🗺 Open Map</h3>
+        <p class="sub">Navigate pandals near you</p>
+        <a href="{% url 'map' %}" class="btn">Open Map</a>
+    </div>
+
+    <!-- Total -->
+    <div class="card">
+        <h3>📍 Total Pandals</h3>
+        <div class="stat" id="total">{{ total_pandals }}</div>
+        <p class="sub">Available in database</p>
+    </div>
+
+<!-- Top -->
+<div class="card">
+    <h3>⭐ Top Rated</h3>
+
+    {% for p in top_pandals %}
+        <p>⭐ {{ p.name }}</p>
+        <p>Rating ⭐ {{ p.rating }}</p>
+        <hr style="border:0.5px solid rgba(255,255,255,0.1);">
+    {% empty %}
+        <p class="sub">No data yet</p>
+    {% endfor %}
+
+</div>
+
+
+<!-- Favourite -->
+<div class="card">
+    <h3>❤️ Favourite Pandals</h3>
+
+    {% if fav_data %}
+    <div class="fav-card">
+
+        {% for f in fav_data %}
+        <div class="fav-item">
+
+            <b>{{ f.pandal.name }}</b><br>
+            <small class="sub">{{ f.pandal.area }}</small><br>
+
+            ⏰ Best Time:
+            <span style="color:#00ff99;font-weight:600;">
+                {{ f.best_time }}
+            </span><br>
+
+           <button class="go-btn"
+          onclick="goToPandal('{{ f.pandal.latitude }}','{{ f.pandal.longitude }}')">
+                    GO
+                 </button>
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% else %}
+    <p class="sub">No favourites yet</p>
+    {% endif %}
+</div>
+
+
+<!-- Pandel Guide -->
+
+   <div class="card pandel-guide-card">
+  <h3>🤖 Pandel Guide</h3>
+  <p>Ask about pandals, food & culture</p>
+
+  <button class="guide-btn" onclick="openGuide()">
+     Start Guide
+  </button>
+</div>
+
+
+    <!-- Profile -->
+    <div class="card">
+        <h3>👤 Profile</h3>
+        <p>{{ request.user.username }}</p>
+        <p class="sub">{{ request.user.email }}</p>
+        <a href="{% url 'my_reviews' %}" class="btn">My Reviews</a>
+    </div>
+
+</div>
+
+<!-- Chatbot Panel -->
+<div id="chatbotPanel" class="chatbot-panel">
+
+  <div class="chatbot-header">
+    🤖 Pandel Guide
+    <span onclick="closeGuide()">✖</span>
+  </div>
+
+  <div id="chatBody" class="chat-body"></div>
+
+  <div class="chat-input">
+    <input id="chatInput" placeholder="Ask about pandals, food, culture..." />
+    <button onclick="sendChat()">Send</button>
+  </div>
+
+</div>
+
+
+<script>
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+
+// Animated count
+
+let el = document.getElementById("total");
+if(el){
+    let final = parseInt(el.innerText);
+    let i=0;
+    let anim = setInterval(()=>{
+        i++;
+        el.innerText=i;
+        if(i>=final) clearInterval(anim);
+    },20);
+}
+function goToPandal(lat, lng){
+    window.location.href = "/map/?dest_lat=" + lat + "&dest_lng=" + lng;
+}
+
+setInterval(()=>{
+    if(!guideOpen){
+        fetch("/dashboard/")
+          .then(res=>res.text())
+          .then(html=>{
+              document.open();
+              document.write(html);
+              document.close();
+          })
+    }
+},10000);
+
+
+
+// Chatbot
+let guideOpen = false;
+
+function openGuide(){
+  chatbotPanel.classList.add("show");
+  guideOpen=true;
+  saveChatState();
+}
+
+function closeGuide(){
+  chatbotPanel.classList.remove("show");
+  guideOpen=false;
+  saveChatState();
+}
+
+
+// Chat send  
+function addMessage(msg,type){
+  let div=document.createElement("div");
+  div.className= type=="user"?"chat-user":"chat-bot";
+  div.innerText=msg;
+  chatBody.appendChild(div);
+  chatBody.scrollTop=chatBody.scrollHeight;
+
+  saveChatState();
+}
+// Save chat state
+function saveChatState(){
+  localStorage.setItem("chatHTML", chatBody.innerHTML);
+  localStorage.setItem("chatOpen", guideOpen ? "1" : "0");
+}
+
+
+function sendChat(){
+    let msg = chatInput.value.trim();
+    if(!msg) return;
+
+    addMessage(msg,"user");
+    chatInput.value="";
+
+    fetch("/chatbot/ask/",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body:JSON.stringify({message:msg})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+    addMessage(data.reply,"bot");
+
+    if(data.button && data.destination){
+        addNavigateButton(data.destination);
+    }
+});
+}
+
+// Navigation
+function addNavigateButton(dest){
+    // avoid duplicate
+    if(document.getElementById("navBtn")) return;
+
+    let btn=document.createElement("button");
+    btn.className="guide-btn";
+    btn.id="navBtn";
+    btn.innerText="Go / Navigate";
+
+    btn.onclick=function(){
+        startNavigationFromChat(dest);
+    }
+
+    chatBody.appendChild(btn);
+    chatBody.scrollTop=chatBody.scrollHeight;
+}
+
+// Navigation
+function startNavigationFromChat(dest){
+    window.location.href = "/map/?chat_dest=" + encodeURIComponent(dest);
+}
+
+
+// Close chat on click outside
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById("chatbotPanel").addEventListener("click", function(e){
+      e.stopPropagation();
+  });
+});
+
+
+// Restore chat from database (user wise)
+document.addEventListener("DOMContentLoaded", function(){
+
+   fetch("/chat/history/")
+   .then(res=>res.json())
+   .then(data=>{
+      chatBody.innerHTML="";
+      data.forEach(c=>{
+         addMessage(c.message, c.sender);
+      });
+   });
+
+});
+
+</script>
+
+</body>
+</html>
+
+

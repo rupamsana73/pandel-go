@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PANDEL GO | Map</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    @keyframes fadeInUp{
+ from{opacity:0; transform:translateY(10px);}
+ to{opacity:1; transform:translateY(0);}
+}
+
+body{
+    margin:0;
+    background:#0b0f14;
+    color:white;
+    font-family:'Poppins',Arial;
+}
+
+/* ===== TOP BAR ===== */
+.topbar{
+    height:60px;
+    background:#0e1218;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    animation: slideDown .6s ease;
+}
+
+@keyframes slideDown{
+    from{transform:translateY(-60px); opacity:0;}
+    to{transform:translateY(0); opacity:1;}
+}
+
+.title{
+    color:#00ffff;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+/* Avatar */
+.user-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#00d2ff,#3a7bd5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    font-weight:700;
+    color:black;
+    text-transform:uppercase;
+    box-shadow:0 0 15px rgba(0,210,255,.6);
+}
+
+/* Buttons */
+.top-actions{
+    display:flex;
+    gap:12px;
+}
+
+.back-btn,.logout-btn{
+    text-decoration:none;
+    font-weight:500;
+    padding:6px 14px;
+    border-radius:20px;
+    transition:.3s;
+}
+
+.back-btn{
+    color:#00ffff;
+    border:1px solid #00ffff;
+}
+.back-btn:hover{
+    background:#00ffff;
+    color:black;
+}
+
+.logout-btn{
+    color:#ff4d4d;
+    border:1px solid #ff4d4d;
+}
+.logout-btn:hover{
+    background:#ff4d4d;
+    color:white;
+}
+
+/* ===== MAP ===== */
+#map{
+    height:calc(100vh - 60px);
+    width:100%;
+    animation: fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.user-pin{
+    font-size:30px;
+    filter: drop-shadow(0 0 6px #00ffff);
+}
+.route-info{
+background:#0e1218;
+color:white;
+padding:10px 14px;
+border-radius:12px;
+font-size:13px;
+box-shadow:0 0 10px rgba(0,255,255,.5);
+}
+
+.leaflet-routing-container{display:none;}
+
+/* Main route line */
+.leaflet-routing-container-hide .leaflet-routing-alt,
+.leaflet-routing-container {
+    display:none !important;
+}
+
+/* Route path */
+.leaflet-routing-line path{
+    stroke: #e53935 !important;   /* Google red */
+    stroke-width: 4 !important;  /* standard thin */
+    stroke-opacity: 0.99 !important;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Optional soft glow */
+.leaflet-routing-line path{
+    filter: drop-shadow(0 0 4px rgba(229,57,53,0.4));
+}
+button:hover{
+ transform:scale(1.05);
+ transition:.2s;
+}
+
+
+.leaflet-popup-content-wrapper{
+    animation: popupFade .35s ease forwards;
+    transform-origin: bottom center;
+}
+
+@keyframes popupFade{
+    from{
+        opacity:0;
+        transform: translateY(10px) scale(0.95);
+    }
+    to{
+        opacity:1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.leaflet-popup-tip{
+    animation: popupFade .35s ease forwards;
+}
+.leaflet-popup-content button:hover{
+    transform:scale(1.04);
+    box-shadow:0 0 12px rgba(0,255,255,0.9);
+}
+.route-info{
+ background:#0e1218;
+ color:white;
+ padding:12px 16px;
+ border-radius:14px;
+ font-size:14px;
+ box-shadow:0 0 12px rgba(0,255,255,.5);
+ cursor:pointer;
+ transition:.3s;
+}
+.route-info:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 18px rgba(0,255,255,.8);
+}
+
+button:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 14px rgba(0,255,180,1);
+}
+.turn-box{
+ background:#0e1218;
+ color:white;
+ padding:12px 16px;
+ border-radius:14px;
+ font-size:14px;
+ box-shadow:0 0 12px rgba(0,255,255,.6);
+ animation:fadeInUp .4s ease;
+ text-align:left;
+}
+
+.turn-arrow{
+ font-size:20px;
+ margin-right:6px;
+}
+
+.leaflet-routing-line path{
+ stroke: transparent !important;
+}
+/* ===== COMMON ===== */
+        body{
+          margin:0;
+          font-family:Arial, sans-serif;
+          background:#0e1218;
+          color:white;
+        }
+
+        button{
+          min-height:38px;
+          font-size:14px;
+          border-radius:10px;
+        }
+
+        input,select,textarea{
+          border-radius:10px;
+          padding:8px;
+          font-size:14px;
+        }
+
+        #map{
+          width:100%;
+          height:100vh;
+        }
+
+        .topbar{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:10px;
+          background:#0b0f14;
+          box-shadow:0 0 10px rgba(0,255,255,.3);
+        }
+
+        .title{font-size:16px;font-weight:700;}
+
+        .user-avatar{
+          width:34px;height:34px;border-radius:50%;
+          background:#00ff99;display:flex;
+          align-items:center;justify-content:center;
+          color:black;font-weight:bold;
+        }
+
+        #searchBox{width:260px;}
+
+        .route-info{
+          background:#0b0f14;
+          padding:12px;border-radius:14px;
+          box-shadow:0 0 10px rgba(0,255,255,.3);
+          font-size:14px;
+        }
+
+        .leaflet-popup-content{
+          max-height:250px;
+          overflow-y:auto;
+        }
+
+
+        @media(min-width:769px){
+          .topbar{padding:12px 30px;}
+          .title{font-size:18px;}
+          .route-info{font-size:15px;}
+          #searchBox{width:300px;}
+        }
+
+      /* ===== ROUTE INFO PANEL ===== */
+.route-info{
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88%;
+  max-width: 380px;
+
+  background: #0b0f14;
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  font-size: 13px;
+  line-height: 1.35;
+
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0,255,255,.35);
+}
+
+.route-info b,
+.route-info span,
+.route-info small{
+  font-size: 12.5px;
+}
+
+.route-info button{
+  width: 100%;
+  padding: 6px;
+  margin-top: 6px;
+  border-radius: 9px;
+  font-size: 12.5px;
+}
+
+
+/* ===== GO BUTTON ===== */
+.go-btn{
+  display:block;
+  margin:6px auto;
+  padding:6px 14px;
+  border-radius:20px;
+  border:none;
+  background:linear-gradient(135deg,#00ff99,#00c9a7);
+  font-weight:700;
+  color:black;
+  cursor:pointer;
+  box-shadow:0 0 8px rgba(0,255,150,.6);
+  transition:.3s;
+  text-align:center;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .go-btn{
+    padding:4px 10px;
+    font-size:11px;
+    border-radius:14px;
+  }
+}
+
+@media(max-width:600px){
+  .leaflet-popup-content{
+    max-width:220px !important;
+    font-size:12px;
+    padding:6px !important;
+  }
+}
+/* MOBILE */
+@media(max-width:600px){
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    padding:8px 12px;
+    justify-content:flex-start;
+  }
+
+  .title{
+    display:none;
+  }
+
+  .user-avatar{
+    width:28px;
+    height:28px;
+    font-size:14px;
+  }
+
+  .top-actions{
+    display:flex;
+    gap:10px;
+    margin-left:auto;
+  }
+
+  .back-btn{
+    font-size:12px;
+    text-decoration:none;
+    color:#00f5ff;
+  }
+
+  .logout-btn{
+    padding:5px 12px;
+    border-radius:16px;
+    font-size:12px;
+    background:#ff4d4d;
+    color:white;
+    text-decoration:none;
+    box-shadow:0 0 6px rgba(255,0,0,.4);
+  }
+}
+
+
+
+
+
+</style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+    <div class="user-avatar">
+        {{ request.user.username|slice:":1" }}
+    </div>
+
+    <div class="title">
+        🗺 PANDEL GO MAP DASHBOARD
+    </div>
+
+    <div class="top-actions">
+        <a href="{% url 'dashboard' %}" class="back-btn">⬅ Dashboard</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+</div>
+<!-- Search Box -->
+<input type="text" id="searchBox" placeholder="Search Pandal..."
+style="
+position:absolute;
+top:75px;
+left:50%;
+transform:translateX(-50%);
+padding:8px 15px;
+border-radius:20px;
+border:none;
+outline:none;
+width:260px;
+z-index:999;
+box-shadow:0 0 10px rgba(0,0,0,.4);
+">
+
+<!-- Toast -->
+<div id="toast" style="
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#00ff99;
+color:black;
+padding:12px 24px;
+border-radius:30px;
+font-weight:600;
+display:none;
+z-index:9999;
+box-shadow:0 0 15px rgba(0,255,150,.6);
+">
+</div>
+
+
+<!-- MAP -->
+<div id="map"></div>
+
+<!-- Follow Button -->
+<button id="locateBtn" style="
+position:fixed;
+bottom:80px;
+right:20px;
+z-index:9999;
+background:#00f5ff;
+border:none;
+border-radius:50%;
+width:48px;
+height:48px;
+font-size:22px;
+cursor:pointer;
+box-shadow:0 0 12px rgba(0,255,255,.7);
+">
+📍
+</button>
+
+
+
+
+<script>
+    let currentCrowd = "low";
+
+var map = L.map('map').setView([22.5726, 88.3639], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+}).addTo(map);
+
+let markers = [];
+let userLat=null, userLon=null;
+let routeControl=null;
+let userMarker=null; // user marker
+let travelMode = "bike"; // default bike
+let followUser = false; // default false
+let watchId = null;
+let currentRouteCoords = [];
+let segmentTraffic = [];
+let navMode = "walk";
+let destLat = null;
+let destLon = null;
+let activeSegmentIndex = 0;
+let currentInstructionIndex = 0;
+let routeInstructions = [];
+const chatParams = new URLSearchParams(window.location.search);
+const chatDest = chatParams.get("chat_dest");
+
+
+//// ===== CHAT DESTINATION =====
+if(chatDest){
+    fetch("/api/pandals/")
+      .then(res => res.json())
+      .then(data => {
+
+        let cleanDest = chatDest
+            .toLowerCase()
+            .replace(/jabo|jete|jabo|chai|pandel|pandale|jetechai/g,"")
+            .replace(/[^a-z]/g,"")
+            .trim();
+
+        if(cleanDest){
+
+            let found = data.find(p => {
+                let name = p.name
+                    .toLowerCase()
+                    .replace(/[^a-z]/g,"")
+                    .trim();
+
+                return name.includes(cleanDest) || cleanDest.includes(name);
+            });
+
+            if(found){
+                destLat = found.latitude;
+                destLon = found.longitude;
+                goToPandal(destLat, destLon);
+            }else{
+                console.log("Pandal not found:", cleanDest);
+            }
+        }
+
+      });
+}
+
+
+
+// Destination
+const params = new URLSearchParams(window.location.search);
+destLat = parseFloat(params.get("dest_lat"));
+destLon = parseFloat(params.get("dest_lng"));
+let routeDrawn = false;
+
+
+// ===== Info badge =====
+var infoBox = L.control({position:'bottomleft'});
+infoBox.onAdd=function(){
+    let div=L.DomUtil.create('div','route-info');
+    div.innerHTML=`
+      <div id="navPanel" onclick="openModeSelect()">
+        🧭 Start navigation
+      </div>
+    `;
+    return div;
+}
+infoBox.addTo(map);
+
+/// ================= LIVE USER LOCATION =================
+if(navigator.geolocation){
+    navigator.geolocation.watchPosition(pos=>{
+        userLat = pos.coords.latitude;
+        userLon = pos.coords.longitude;
+
+        var userIcon = L.divIcon({
+            html:"📍",
+            className:"user-pin",
+            iconSize:[30,30],
+            iconAnchor:[15,30]
+        });
+
+        if(userMarker){
+            userMarker.setLatLng([userLat,userLon]);
+        }else{
+            userMarker = L.marker([userLat,userLon],{icon:userIcon})
+            .addTo(map)
+            .bindPopup("📍 You are here");
+        }
+
+        // 🔥 FOLLOW USER MODE
+        if(followUser){
+            map.setView([userLat,userLon],17);
+        }
+
+       if(!isNaN(destLat) && !isNaN(destLon) && !routeDrawn){
+            showRoute(destLat, destLon);
+               routeDrawn = true;
+        }
+         if(followUser) updateNav(pos);
+    });
+}
+
+// ================= PANDALS =================
+
+function loadPandals(){
+
+ fetch("/api/pandals/")
+ .then(res=>res.json())
+ .then(data=>{
+
+    // old markers clear
+    markers.forEach(o=>map.removeLayer(o.marker));
+    markers = [];
+
+    data.forEach(p=>{
+       let iconColor =
+         p.crowd=="low"?"green":
+         p.crowd=="medium"?"orange":
+         p.crowd=="high"?"red":"gray";
+
+      let m = L.marker([p.latitude,p.longitude], {
+    icon: L.divIcon({
+        html:`<div style="font-size:22px;color:${iconColor};">🚩</div>`,
+        className:"",
+        iconSize:[30,30],
+        iconAnchor:[15,30]
+    })
+})
+.addTo(map)
+.bindPopup(`
+<b>${p.name}</b><br>
+Area:${p.area}<br>
+Theme:${p.theme}<br>
+Rating:${p.rating}<br><br>
+
+<button 
+onclick="goToPandal(${p.latitude},${p.longitude})"
+class="go-btn">
+📍 Go
+</button>
+
+
+
+<b>👥 Crowd Votes:</b><br>
+🟢 Low (${p.crowd_low || 0})<br>
+🟡 Medium (${p.crowd_medium || 0})<br>
+🔴 High (${p.crowd_high || 0})<br>
+
+<b>Final Crowd:</b>
+<span style="
+padding:4px 10px;
+border-radius:12px;
+background:${
+p.crowd=='low'?'#00ff99':
+p.crowd=='medium'?'#ffe066':
+p.crowd=='high'?'#ff6b6b':'#cccccc'
+};
+${p.crowd=='none'?'NO DATA':p.crowd.toUpperCase()}
+font-weight:600;">
+</span>
+<br><br>
+
+
+<b>⏰ Best Time To Visit:</b>
+<span style="
+background:#00ff99;
+padding:4px 10px;
+border-radius:12px;
+font-weight:600;">
+${p.best_time}
+</span>
+<br><br>
+
+<b>⏰ Select Visit Time</b><br>
+
+<select id="timeSlot${p.id}">
+<option value="">-- Select Time --</option>
+<option value="00-02">12 – 2 AM</option>
+<option value="02-04">2 – 4 AM</option>
+<option value="04-06">4 – 6 AM</option>
+<option value="06-08">6 – 8 AM</option>
+<option value="08-10">8 – 10 AM</option>
+<option value="10-12">10 – 12 PM</option>
+<option value="12-14">12 – 2 PM</option>
+<option value="14-16">2 – 4 PM</option>
+<option value="16-18">4 – 6 PM</option>
+<option value="18-20">6 – 8 PM</option>
+<option value="20-22">8 – 10 PM</option>
+<option value="22-24">10 – 12 AM</option>
+</select>
+
+<b>👥 Crowd Level</b><br>
+
+<button onclick="setCrowd(${p.id},'low',document.getElementById('timeSlot${p.id}').value); currentCrowd='low';"
+style="background:#00ff99;border:none;padding:6px 12px;border-radius:12px;margin:3px;font-weight:600;">
+🟢 Low
+</button>
+
+<button onclick="setCrowd(${p.id},'medium',document.getElementById('timeSlot${p.id}').value); currentCrowd='medium';"
+style="background:#ffe066;border:none;padding:6px 12px;border-radius:12px;margin:3px;font-weight:600;">
+🟡 Medium
+</button>
+
+<button onclick="setCrowd(${p.id},'high',document.getElementById('timeSlot${p.id}').value); currentCrowd='high';"
+style="background:#ff6b6b;border:none;padding:6px 12px;border-radius:12px;margin:3px;font-weight:600;">
+🔴 High
+</button>
+
+<br><br>
+
+<button onclick="toggleFav(${p.id})"
+id="favBtn${p.id}"
+style="padding:5px 12px;border-radius:12px;border:none;
+background:#ff4d6d;color:white;font-weight:600;">
+❤️ Favourite
+</button>
+
+<hr>
+
+<b>Give Review</b><br>
+
+<select id="rating${p.id}">
+<option value="5">⭐ 5</option>
+<option value="4">⭐ 4</option>
+<option value="3">⭐ 3</option>
+<option value="2">⭐ 2</option>
+<option value="1">⭐ 1</option>
+</select>
+
+<br><br>
+
+<textarea id="comment${p.id}" placeholder="Write comment..." rows="2"></textarea>
+
+<br><br>
+
+<button onclick="submitReview(${p.id})"
+style="padding:5px 12px;border-radius:12px;border:none;
+background:#00ff99;color:black;font-weight:600;">
+Submit Review
+</button>
+
+<br><br>
+
+<button onclick="loadReviews(${p.id})"
+style="padding:5px 12px;border-radius:12px;border:none;
+background:#3a7bd5;color:white;">
+📖 View Reviews
+</button>
+
+<div id="reviewBox${p.id}" style="margin-top:8px;"></div>
+`, { autoPan:true });
+    markers.push({
+           name: p.name.toLowerCase(),
+           marker: m
+       });
+
+m.on("click",function(){
+   setTimeout(()=>{
+      m.openPopup();
+        // auto close after 5 sec
+      setTimeout(()=>{
+         m.closePopup();
+      },60000);
+   },150);
+});
+});
+}); 
+}  
+
+// First load
+loadPandals();
+
+// Auto refresh every 10 sec
+setInterval(loadPandals,10000);
+
+// ================= SEARCH =================
+const searchBox = document.getElementById("searchBox");
+
+const suggestionBox = document.createElement("div");
+suggestionBox.style.position = "fixed";
+suggestionBox.style.background = "#0e1218";
+suggestionBox.style.borderRadius = "12px";
+suggestionBox.style.width = "260px";
+suggestionBox.style.zIndex = "9999";
+suggestionBox.style.display = "none";
+suggestionBox.style.boxShadow = "0 0 15px rgba(0,255,255,.4)";
+document.body.appendChild(suggestionBox);
+
+searchBox.addEventListener("input", function(){
+
+   let rect = searchBox.getBoundingClientRect();
+
+   suggestionBox.style.top = (rect.bottom + 6) + "px";
+   suggestionBox.style.left = rect.left + "px";
+
+   let v = this.value.toLowerCase();
+   suggestionBox.innerHTML = "";
+
+   if(!v){
+      suggestionBox.style.display = "none";
+      return;
+   }
+
+   let matches = markers.filter(o => o.name.includes(v));
+
+   if(matches.length == 0){
+      suggestionBox.style.display = "none";
+      return;
+   }
+
+   matches.slice(0,6).forEach(o=>{
+      let div = document.createElement("div");
+      div.innerText = o.name;
+      div.style.padding = "8px";
+      div.style.cursor = "pointer";
+      div.style.color = "#00ffff";
+
+      div.onmouseover = ()=> div.style.background="#003344";
+      div.onmouseout  = ()=> div.style.background="transparent";
+
+      div.onclick = ()=>{
+         searchBox.value = o.name;
+         o.marker.openPopup();
+         map.setView(o.marker.getLatLng(),16,{animate:true});
+         suggestionBox.style.display="none";
+      }
+
+      suggestionBox.appendChild(div);
+   });
+
+   suggestionBox.style.display = "block";
+});
+
+function getSegmentCrowd(){
+   let r = Math.random();
+   if(r < 0.33) return "low";
+   if(r < 0.66) return "medium";
+   return "high";
+}
+
+
+function getCrowdColor(c){
+   if(c=="low") return "#00ff99";
+   if(c=="medium") return "#ffe066";
+   if(c=="high") return "#ff4d4d";
+   return "#cccccc";
+}
+
+
+// ================= ROUTE =================
+function showRoute(lat,lon){
+
+if(!userLat){ 
+   alert("Waiting for GPS..."); 
+   return;
+}
+
+if(routeControl){
+   map.removeControl(routeControl);
+}
+
+routeControl = L.Routing.control({
+    waypoints:[
+        L.latLng(userLat,userLon),
+        L.latLng(lat,lon)
+    ],
+    show:false,
+    addWaypoints:false,
+    draggableWaypoints:false,
+    routeWhileDragging:false,
+
+    // 🔴 Hide default red route line
+    lineOptions:{
+        styles:[{
+            color:"##003cff",
+            opacity:0,
+            weight:0
+        }]
+    },
+
+    createMarker:function(){return null;}
+})
+.on('routesfound', function(e){
+   routeInstructions = e.routes[0].instructions || [];
+   currentInstructionIndex = 0;
+   let coords = e.routes[0].coordinates;
+   activeSegmentIndex = 0;
+   currentRouteCoords = coords;
+   destLat = lat;
+   destLon = lon;
+   buildSegments();
+
+   // clear old segments
+   if(window.segmentLines){
+      window.segmentLines.forEach(l=>map.removeLayer(l));
+   }
+   window.segmentLines = [];
+
+   for(let i=0;i<coords.length-1;i++){
+
+      let crowd = getSegmentCrowd(); // fake traffic
+     
+
+      let color =
+        crowd=="low" ? "#00ff99" :
+        crowd=="medium" ? "#ffe066" :
+                          "#ff4d4d";
+
+      let seg = L.polyline([
+   [coords[i].lat, coords[i].lng],
+   [coords[i+1].lat, coords[i+1].lng]
+],{
+   color: color,
+   weight:3,        //  thicker line
+   opacity:1,       //  more solid
+   lineCap:"round",
+   lineJoin:"round"
+}).addTo(map);
+
+
+      window.segmentLines.push(seg);
+   }
+
+   let dist = e.routes[0].summary.totalDistance / 1000;
+
+   let speed = travelMode=="walk"?5:25;
+   let baseTime = (dist/speed)*60;
+
+let crowdFactor = 1;
+if(currentCrowd=="medium") crowdFactor=1.12;
+if(currentCrowd=="high") crowdFactor=1.28;
+
+   let finalTime = Math.round(baseTime*crowdFactor);
+
+document.querySelector('.route-info').innerHTML = `
+<div style="animation:fadeInUp .4s ease;">
+📏 ${dist.toFixed(2)} km<br>
+⏱ ${finalTime} min<br><br>
+
+<button onclick="prepareNavigation()" 
+style="
+padding:8px 18px;
+border-radius:20px;
+border:none;
+background:linear-gradient(135deg,#00ff99,#00cc88);
+color:black;
+font-weight:700;
+cursor:pointer;
+box-shadow:0 0 12px rgba(0,255,150,.6);
+">
+▶ Start Navigation
+</button>
+</div>
+`;
+})
+.addTo(map);
+
+}
+
+// ================= BUILD SEGMENTS =================
+function buildSegments(){
+   segmentTraffic = [];
+
+   for(let i=0;i<currentRouteCoords.length-1;i++){
+      segmentTraffic.push({
+         from: currentRouteCoords[i],
+         to: currentRouteCoords[i+1],
+         traffic:getSegmentTraffic()
+      });
+   }
+}
+
+
+
+// ================= DRAW SEGMENTS =================
+function drawSegments(){
+
+   window.segmentLines = [];
+
+   segmentTraffic.forEach(s=>{
+
+      let color = s.traffic=="high"?"red":s.traffic=="medium"?"orange":"green";
+
+      let line = L.polyline([
+         [s.from.lat,s.from.lng],
+         [s.to.lat,s.to.lng]
+      ],{
+         color:color,
+         weight:5,
+         opacity:0.8
+      }).addTo(map);
+
+      window.segmentLines.push(line);
+   });
+}
+
+// ================= CLEAR =================
+function clearRoute(){
+    if(routeControl){
+        map.removeControl(routeControl);
+        routeControl=null;
+        document.querySelector('.route-info').innerHTML="🧭 Start navigation";
+    }
+}
+
+// ================= FAVOURITE =================
+function toggleFav(id){
+
+    fetch(`/favourite/${id}/`)
+    .then(res => res.json())
+    .then(data => {
+
+        let btn = document.getElementById("favBtn"+id);
+
+        if(data.status=="added"){
+            btn.innerHTML = "❤️ Favourited";
+            btn.style.background = "#e60026";
+        }
+        else{
+            btn.innerHTML = "🤍 Favourite";
+            btn.style.background = "#ff4d6d";
+        }
+
+    })
+    .catch(err=>{
+        console.log(err);
+    });
+
+}
+
+// ================= REVIEW =================
+function submitReview(id){
+    let rating = document.getElementById("rating"+id).value;
+    let comment = document.getElementById("comment"+id).value;
+
+    fetch(`/submit-review/${id}/`,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({
+            rating:rating,
+            comment:comment
+        })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        showToast("⭐ Review Submitted Successfully!");
+        document.getElementById("comment"+id).value="";
+        document.getElementById("rating"+id).value="5";
+    });
+}
+
+
+function loadReviews(id){
+    fetch(`/get-reviews/${id}/`)
+    .then(res=>res.json())
+    .then(data=>{
+        let box = document.getElementById("reviewBox"+id);
+        box.innerHTML="";
+
+        if(data.length==0){
+            box.innerHTML="<p>No reviews yet</p>";
+        }
+
+        data.forEach(r=>{
+            box.innerHTML += `
+              <p><b>${r.user}</b> ⭐${r.rating}<br>${r.comment}</p>
+            `;
+        });
+    })
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function showToast(msg){
+    let t = document.getElementById("toast");
+    t.innerText = msg;
+    t.style.display = "block";
+
+    setTimeout(()=>{
+        t.style.display = "none";
+    },2500);
+}
+
+
+function setCrowd(id, level, time){
+
+   if(!time){
+      showToast("⏰ Please select time first");
+      return;
+   }
+
+   fetch("/submit-crowd/",{
+     method:"POST",
+     headers:{
+       "X-CSRFToken": getCookie("csrftoken"),
+       "Content-Type":"application/x-www-form-urlencoded"
+     },
+     body:`pandal_id=${id}&level=${level}&time_slot=${time}`
+   })
+   .then(res=>res.json())
+   .then(data=>{
+      showToast("👥 Crowd + Time submitted!");
+   })
+
+}
+function selectMode(mode,lat,lon){
+   travelMode = mode;
+   showToast("Mode: " + (mode=="bike"?"🏍 Bike":"🚶 Walk"));
+   showRoute(lat,lon);
+}
+
+function showTravelOptions(btn,lat,lon){
+
+   document.querySelectorAll("[id^='travelBox']").forEach(b=>{
+      b.style.display="none";
+   });
+
+   btn.nextElementSibling.style.display="block";
+}
+
+function toggleFollow(){
+   followUser = !followUser;
+   showToast(followUser ? "📍 Following you" : "🗺 Map unlocked");
+}
+// ================= TRAFFIC =================
+function getSegmentTraffic(){
+   return Math.random();   // 0.0 to 1.0
+}
+
+
+// ================= NAVIGATION CORE =================
+
+let FORCE_SIM = false;   // true = PC test, false = real GPS
+let simTimer = null;
+
+function startNavigation(){
+   activeSegmentIndex = 0;   // 🔥 FIX
+   followUser = true;
+   showToast("▶ Live navigation started");
+
+   if(FORCE_SIM){
+      startSimulator();
+   }else{
+      watchId = navigator.geolocation.watchPosition(updateNav,{
+         enableHighAccuracy:true,
+         maximumAge:0
+      });
+   }
+}
+
+
+function startSimulator(){
+
+   if(!currentRouteCoords || !currentRouteCoords.length){
+      console.log("No route for simulation");
+      return;
+   }
+
+   let i = activeSegmentIndex || 0;
+
+   if(simTimer) clearInterval(simTimer);
+
+   let speed = travelMode=="walk" ? 2200 : 900;   // 🔥 walk slow, bike fast
+
+   simTimer = setInterval(()=>{
+
+      if(i >= currentRouteCoords.length){
+         clearInterval(simTimer);
+         console.log("Simulation finished");
+         return;
+      }
+
+      let p = currentRouteCoords[i];
+
+      updateNav({
+         coords:{
+            latitude: p.lat,
+            longitude: p.lng
+         }
+      });
+
+      i++;
+
+   }, speed);
+}
+
+
+// ===== GPS UPDATE =====
+function updateNav(pos){
+   userLat = pos.coords.latitude;
+   userLon = pos.coords.longitude;
+
+   if(userMarker){
+      userMarker.setLatLng([userLat,userLon]);
+   }
+
+   if(followUser){
+      map.setView([userLat,userLon],17);   // 🔥 FIX
+   }
+
+   if(currentRouteCoords.length>0){
+      snapToRoute();
+      recalcETA();
+      updateSegmentProgress();
+      updateTurnInstruction();
+      checkOffRoute();
+   }
+}
+
+// ===== SNAP TO ROUTE =====
+function snapToRoute(){
+
+ if(!currentRouteCoords.length) return;
+
+ let minDist = Infinity;
+ let nearestIndex = activeSegmentIndex;
+
+ for(let i=activeSegmentIndex;i<currentRouteCoords.length;i++){
+   let p=currentRouteCoords[i];
+   let d=map.distance([userLat,userLon],[p.lat,p.lng]);
+
+   if(d<minDist){
+     minDist=d;
+     nearestIndex=i;
+   }
+ }
+
+ // only move forward
+ if(nearestIndex >= activeSegmentIndex){
+    let p = currentRouteCoords[nearestIndex];
+    userLat = p.lat;
+    userLon = p.lng;
+    activeSegmentIndex = nearestIndex;
+    userMarker.setLatLng([userLat,userLon]);
+ }
+}
+
+
+// ===== ETA =====
+function recalcETA(){
+   if(isNaN(destLat) || isNaN(destLon)) return;
+
+   let dist = map.distance([userLat,userLon],[destLat,destLon]) / 1000;
+
+   let speed = travelMode=="walk" ? 5 : 25;
+   let base = (dist/speed)*60;
+
+   let crowdFactor = currentCrowd=="high"?1.28:currentCrowd=="medium"?1.12:1;
+
+   let eta = Math.max(1, Math.round(base*crowdFactor));
+
+   document.querySelector(".route-info").innerHTML =
+`📍 Navigating (${travelMode=="walk"?"🚶":"🏍"})<br>
+ 📏 ${dist.toFixed(2)} km<br>
+ ⏱ ${eta} min<br><br>
+
+ <button onclick="clearNavigation()"
+ style="padding:4px 10px;border-radius:10px;border:none;background:#ff4d4d;color:white;">
+ ❌ Stop
+ </button>`;
+
+}
+
+// ===== OFF ROUTE =====
+function checkOffRoute(){
+   let minDist = Infinity;
+
+   currentRouteCoords.forEach(p=>{
+      let d = map.distance([userLat,userLon],[p.lat,p.lng]);
+      if(d < minDist) minDist = d;
+   });
+
+   if(minDist > 120){
+      showToast("⚠️ Off route. Recalculating...");
+      showRoute(destLat,destLon);
+   }
+}
+function clearNavigation(){
+
+   // stop gps / simulator
+   if(watchId){
+      navigator.geolocation.clearWatch(watchId);
+      watchId = null;
+   }
+
+   if(simTimer){
+      clearInterval(simTimer);
+      simTimer = null;
+   }
+
+   // reset values
+   followUser = false;
+   currentRouteCoords = [];
+   destLat = null;
+   destLon = null;
+
+   // remove route
+   if(routeControl){
+      map.removeControl(routeControl);
+      routeControl = null;
+   }
+
+   if(window.segmentLines){
+      window.segmentLines.forEach(l=>map.removeLayer(l));
+      window.segmentLines = [];
+   }
+
+   // reset info
+   document.querySelector(".route-info").innerHTML = "🧭 Start navigation";
+
+   showToast("❌ Navigation cleared");
+}
+
+
+
+function updateSegmentProgress(){
+
+   if(!currentRouteCoords.length) return;
+
+   let minDist = Infinity;
+   let nearestIndex = 0;
+
+   currentRouteCoords.forEach((p,i)=>{
+      let d = map.distance([userLat,userLon],[p.lat,p.lng]);
+      if(d < minDist){
+         minDist = d;
+         nearestIndex = i;
+      }
+   });
+
+   activeSegmentIndex = nearestIndex;
+   highlightCurrentSegment();
+}
+function showTurnInstruction(){
+
+   if(!routeInstructions.length) return;
+
+   let ins = routeInstructions[currentInstructionIndex];
+   if(!ins) return;
+
+   let dir = ins.type;
+
+   let arrow = "⬆️";
+   if(dir=="Right") arrow="➡️";
+   if(dir=="Left") arrow="⬅️";
+   if(dir=="SharpRight") arrow="↗️";
+   if(dir=="SharpLeft") arrow="↖️";
+
+   document.querySelector(".route-info").innerHTML =
+   `${arrow} ${ins.text}<br>
+    📏 ${Math.round(ins.distance)} m`;
+}
+
+// ===== TURN INSTRUCTION =====
+function updateTurnInstruction(){
+
+ if(!routeInstructions.length) return;
+
+ let ins = routeInstructions[currentInstructionIndex];
+ if(!ins || !ins.latLng) return;   // 🔥 crash fix
+
+ let d = map.distance(
+   [userLat,userLon],
+   [ins.latLng.lat, ins.latLng.lng]
+ );
+
+ if(d < 25){
+   currentInstructionIndex++;
+ }
+
+ renderTurnInstruction(ins);
+}
+
+
+// ===== MODE SELECT =====
+function openModeSelect(){
+   document.getElementById("navPanel").innerHTML = `
+      Choose Mode<br><br>
+      <button onclick="selectNavMode('walk')" style="margin:4px;padding:6px 14px;border-radius:10px;">🚶 Walk</button>
+      <button onclick="selectNavMode('bike')" style="margin:4px;padding:6px 14px;border-radius:10px;">🏍 Bike</button>
+   `;
+}
+
+function selectNavMode(mode){
+   travelMode = mode;
+
+   document.getElementById("navPanel").innerHTML = `
+      <b>${mode=="walk"?"🚶 Walking":"🏍 Biking"}</b><br>
+      Calculating route...
+   `;
+
+   showToast("Mode Selected: " + mode.toUpperCase());
+}
+// ===== PANDAL SELECT =====
+function goToPandal(lat,lon){
+   destLat = lat;
+   destLon = lon;
+
+   if(routeControl){
+      map.removeControl(routeControl);
+   }
+
+   showRoute(lat,lon);
+}
+function prepareNavigation(){
+   document.querySelector('.route-info').innerHTML = `
+   <div style="animation:fadeInUp .4s ease;">
+   <b>Choose Mode</b><br><br>
+
+   <button onclick="startNavWithMode('walk')"
+   style="margin:6px;padding:8px 16px;border-radius:18px;border:none;background:#eee;">
+   🚶 Walk
+   </button>
+
+   <button onclick="startNavWithMode('bike')"
+   style="margin:6px;padding:8px 16px;border-radius:18px;border:none;background:#00f5ff;">
+   🏍 Bike
+   </button>
+   </div>
+   `;
+}
+
+function startNavWithMode(mode){
+   travelMode = mode;
+
+   document.querySelector('.route-info').innerHTML =
+   `🚦 Starting navigation (${mode=="walk"?"🚶":"🏍"})...`;
+
+   startNavigation(); // existing function
+}
+
+// ===== TURN INSTRUCTION =====
+function renderTurnInstruction(ins){
+
+ if(!ins) return;
+
+ let arrow="⬆️";
+ if(ins.type=="Right") arrow="➡️";
+ if(ins.type=="Left") arrow="⬅️";
+ if(ins.type=="SharpRight") arrow="↗️";
+ if(ins.type=="SharpLeft") arrow="↖️";
+
+ document.querySelector(".route-info").innerHTML = `
+ <div class="turn-box">
+   <span class="turn-arrow">${arrow}</span>
+   ${ins.text}<br>
+   <small>📏 ${Math.round(ins.distance)} m</small>
+ </div>
+ `;
+}
+function highlightCurrentSegment(){
+
+   if(!segmentTraffic || !segmentTraffic.length) return;
+
+   if(!window.segmentLines) return;
+
+   window.segmentLines.forEach((l,i)=>{
+      if(i == activeSegmentIndex){
+         l.setStyle({weight:8, opacity:1});
+      }else{
+         l.setStyle({weight:4, opacity:0.6});
+      }
+   });
+}
+
+
+let myLocationMarker = null;
+let myAccuracyCircle = null;
+let hideTimer = null;
+
+document.getElementById("locateBtn").addEventListener("click", () => {
+
+    if (!navigator.geolocation) {
+        alert("GPS not supported");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(pos => {
+
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        const acc = pos.coords.accuracy;
+
+        // 🔥 FORCE ZOOM + CENTER
+        map.setView([lat, lon], 18, {
+            animate: true,
+            duration: 0.6
+        });
+
+        // Marker
+        if (myLocationMarker) {
+            myLocationMarker.setLatLng([lat, lon]);
+        } else {
+            myLocationMarker = L.marker([lat, lon]).addTo(map);
+        }
+
+        // Accuracy circle
+        if (myAccuracyCircle) {
+            myAccuracyCircle.setLatLng([lat, lon]).setRadius(acc);
+        } else {
+            myAccuracyCircle = L.circle([lat, lon], {
+                radius: acc,
+                color: "#00f5ff",
+                fillColor: "#00f5ff",
+                fillOpacity: 0.15
+            }).addTo(map);
+        }
+
+        // clear previous timer
+        if (hideTimer) clearTimeout(hideTimer);
+
+        // 🔥 AUTO HIDE AFTER 3 SECONDS
+        hideTimer = setTimeout(() => {
+            if (myLocationMarker) map.removeLayer(myLocationMarker);
+            if (myAccuracyCircle) map.removeLayer(myAccuracyCircle);
+
+            myLocationMarker = null;
+            myAccuracyCircle = null;
+        }, 3000);
+
+    }, err => {
+        alert("Location permission denied");
+    }, {
+        enableHighAccuracy:true
+    });
+
+});
+
+</script>
+</body>
+</html>

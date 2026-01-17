@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PANDEL GO | Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+    background:radial-gradient(circle at top,#0f2027,#000);
+    height:100vh;
+    overflow:hidden;
+}
+
+/* floating gradient circles */
+.shape{
+    height:220px;
+    width:220px;
+    border-radius:50%;
+    position:absolute;
+    filter:blur(40px);
+    animation: float 6s ease-in-out infinite;
+}
+.shape.one{
+    background:linear-gradient(#1845ad,#23a2f6);
+    top:10%;left:15%;
+}
+.shape.two{
+    background:linear-gradient(#ff512f,#f09819);
+    bottom:10%;right:15%;
+    animation-delay:3s;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-40px);}
+    100%{transform:translateY(0);}
+}
+
+/* glass card */
+form{
+    width:420px;
+    background:rgba(255,255,255,0.12);
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    border-radius:18px;
+    backdrop-filter:blur(15px);
+    padding:40px 35px;
+    box-shadow:0 0 60px rgba(0,0,0,0.8);
+    animation: zoomIn .8s ease;
+}
+
+@keyframes zoomIn{
+    from{opacity:0; transform:translate(-50%,-60%) scale(.9);}
+    to{opacity:1; transform:translate(-50%,-50%) scale(1);}
+}
+
+h3{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:20px;
+
+    background: linear-gradient(90deg,#00d2ff,#3a7bd5,#00d2ff);
+    background-size:200%;
+
+    color: transparent;
+
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    animation: gradientMove 4s linear infinite;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0%;}
+    100%{background-position:200%;}
+}
+
+
+/* inputs */
+input{
+    width:100%;
+    height:45px;
+    background:rgba(255,255,255,0.08);
+    border:none;
+    border-radius:8px;
+    margin-top:15px;
+    padding:0 12px;
+    color:white;
+    outline:none;
+}
+input:focus{
+    box-shadow:0 0 12px rgba(0,210,255,.6);
+}
+
+/* button */
+button{
+    margin-top:28px;
+    width:100%;
+    padding:12px;
+    font-size:17px;
+    background:linear-gradient(90deg,#00d2ff,#3a7bd5);
+    color:black;
+    cursor:pointer;
+    border-radius:25px;
+    font-weight:600;
+    transition:.4s;
+}
+button:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 20px rgba(0,210,255,.7);
+}
+
+/* links */
+.link{
+    text-align:center;
+    margin-top:18px;
+    font-size:14px;
+}
+.link a{
+    color:#00d2ff;
+    text-decoration:none;
+}
+.link a:hover{text-decoration:underline;}
+
+/* ===== COMMON ===== */
+        body{
+          margin:0;
+          font-family:Arial, sans-serif;
+          background:#0e1218;
+          color:white;
+        }
+
+        button{
+          min-height:38px;
+          font-size:14px;
+          border-radius:10px;
+        }
+
+        input,select,textarea{
+          border-radius:10px;
+          padding:8px;
+          font-size:14px;
+        }
+
+        #map{
+          width:100%;
+          height:100vh;
+        }
+
+        .topbar{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:10px;
+          background:#0b0f14;
+          box-shadow:0 0 10px rgba(0,255,255,.3);
+        }
+
+        .title{font-size:16px;font-weight:700;}
+
+        .user-avatar{
+          width:34px;height:34px;border-radius:50%;
+          background:#00ff99;display:flex;
+          align-items:center;justify-content:center;
+          color:black;font-weight:bold;
+        }
+
+        #searchBox{width:260px;}
+
+        .route-info{
+          background:#0b0f14;
+          padding:12px;border-radius:14px;
+          box-shadow:0 0 10px rgba(0,255,255,.3);
+          font-size:14px;
+        }
+
+        .leaflet-popup-content{
+          max-height:250px;
+          overflow-y:auto;
+        }
+
+        @media(max-width:768px){
+          .topbar{flex-wrap:wrap;text-align:center;gap:6px;}
+          .title{width:100%;font-size:14px;}
+          .top-actions{width:100%;display:flex;justify-content:center;gap:10px;}
+          #searchBox{width:85% !important;top:70px;}
+          .route-info{font-size:13px;max-width:90%;}
+          button{width:100%;}
+        }
+
+        @media(min-width:769px){
+          .topbar{padding:12px 30px;}
+          .title{font-size:18px;}
+          .route-info{font-size:15px;}
+          #searchBox{width:300px;}
+        }
+
+</style>
+</head>
+<body>
+
+<div class="shape one"></div>
+<div class="shape two"></div>
+
+<form method="POST">
+{% csrf_token %}
+
+<h3>Create PANDEL GO Account</h3>
+
+<input type="text" name="username" placeholder="Username" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="password" name="password" placeholder="Password" required>
+
+<button type="submit">Register</button>
+
+<div class="link">
+Already have account? <a href="{% url 'login' %}">Login</a>
+</div>
+
+</form>
+
+</body>
+</html>
