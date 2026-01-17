@@ -11,7 +11,14 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-this-key")
 DEBUG = False
 
 
-ALLOWED_HOSTS = ["pandel-go.onrender.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "pandel-go.onrender.com",
+    "pandel-go-1.onrender.com",
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
