@@ -112,3 +112,9 @@ SESSION_SAVE_EVERY_REQUEST = True
 TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")

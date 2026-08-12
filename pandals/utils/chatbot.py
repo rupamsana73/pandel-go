@@ -1,7 +1,12 @@
-from together import Together
+from openai import OpenAI
 from django.conf import settings
 
-client = Together(api_key=settings.TOGETHER_API_KEY)
+
+client = OpenAI(
+    api_key=settings.OPENROUTER_API_KEY,
+    base_url="https://openrouter.ai/api/v1",
+)
+
 
 def pandel_chatbot(user_msg):
 
@@ -53,31 +58,35 @@ VISIBILITY RULE
 ------------------------------------------------
 Never show DEST or SHOW_BUTTON in normal visible text except inside brackets.
 
+------------------------------------------------
 INFORMATION RESPONSE RULE
 ------------------------------------------------
 If user asks about pandals, food, culture, clothing, or Puja experience,
 reply in a friendly short helpful answer in the same language as the user.
 
-
 If user greets or asks casually (like hi, hello, kamon acho),
 reply in a friendly festival guide style.
-
-If user asks about pandals, food, culture, clothing, or Puja experience,
-reply in a friendly short helpful answer in the same language as the user.
-
-If user asks about pandals, food, culture, clothing, or Puja experience,
-reply in a friendly short helpful answer in the same language as the user.
-
 """
 
+    try:
+        response = client.chat.completions.create(
+            model="openrouter/free",
+            messages=[
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": user_msg
+                }
+            ],
+            temperature=0.3,
+            max_tokens=300,
+        )
 
+        return response.choices[0].message.content.strip()
 
-    response = client.chat.completions.create(
-        model="deepseek-ai/DeepSeek-V3",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_msg}
-        ]
-    )
-
-    return response.choices[0].message.content
+    except Exception as e:
+        print("OpenRouter Error:", e)
+        return "Sorry, I’m having trouble right now. Please try again."

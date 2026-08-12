@@ -1,227 +1,1681 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>PANDEL GO | Register</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#070b11"
+    >
+
+    <title>Pandel Go | Create Account</title>
+
+
+    <!-- Font -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
-body{
-    background:radial-gradient(circle at top,#0f2027,#000);
-    height:100vh;
-    overflow:hidden;
-}
+/* =========================================================
+   PANDEL GO — REGISTER
+========================================================= */
 
-/* floating gradient circles */
-.shape{
-    height:220px;
-    width:220px;
-    border-radius:50%;
-    position:absolute;
-    filter:blur(40px);
-    animation: float 6s ease-in-out infinite;
-}
-.shape.one{
-    background:linear-gradient(#1845ad,#23a2f6);
-    top:10%;left:15%;
-}
-.shape.two{
-    background:linear-gradient(#ff512f,#f09819);
-    bottom:10%;right:15%;
-    animation-delay:3s;
-}
+:root {
 
-@keyframes float{
-    0%{transform:translateY(0);}
-    50%{transform:translateY(-40px);}
-    100%{transform:translateY(0);}
-}
+    --bg: #070b11;
 
-/* glass card */
-form{
-    width:420px;
-    background:rgba(255,255,255,0.12);
-    position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    border-radius:18px;
-    backdrop-filter:blur(15px);
-    padding:40px 35px;
-    box-shadow:0 0 60px rgba(0,0,0,0.8);
-    animation: zoomIn .8s ease;
-}
+    --panel: #0d131c;
 
-@keyframes zoomIn{
-    from{opacity:0; transform:translate(-50%,-60%) scale(.9);}
-    to{opacity:1; transform:translate(-50%,-50%) scale(1);}
-}
+    --panel-light: #111923;
 
-h3{
-    text-align:center;
-    font-size:28px;
-    margin-bottom:20px;
+    --text: #f5f8fc;
 
-    background: linear-gradient(90deg,#00d2ff,#3a7bd5,#00d2ff);
-    background-size:200%;
+    --muted: #7f8b9b;
 
-    color: transparent;
+    --cyan: #00d8ff;
 
-    background-clip: text;
-    -webkit-background-clip: text;
+    --blue: #2784ff;
 
-    animation: gradientMove 4s linear infinite;
-}
+    --green: #00e89a;
 
-@keyframes gradientMove{
-    0%{background-position:0%;}
-    100%{background-position:200%;}
+    --danger: #ff6675;
+
+    --border: rgba(255,255,255,.075);
+
+    --border-hover: rgba(0,216,255,.35);
+
 }
 
 
-/* inputs */
-input{
-    width:100%;
-    height:45px;
-    background:rgba(255,255,255,0.08);
-    border:none;
-    border-radius:8px;
-    margin-top:15px;
-    padding:0 12px;
-    color:white;
-    outline:none;
-}
-input:focus{
-    box-shadow:0 0 12px rgba(0,210,255,.6);
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
 }
 
-/* button */
-button{
-    margin-top:28px;
-    width:100%;
-    padding:12px;
-    font-size:17px;
-    background:linear-gradient(90deg,#00d2ff,#3a7bd5);
-    color:black;
-    cursor:pointer;
-    border-radius:25px;
-    font-weight:600;
-    transition:.4s;
-}
-button:hover{
-    transform:translateY(-4px);
-    box-shadow:0 0 20px rgba(0,210,255,.7);
+
+html,
+body {
+
+    width: 100%;
+
+    min-height: 100%;
+
 }
 
-/* links */
-.link{
-    text-align:center;
-    margin-top:18px;
-    font-size:14px;
+
+body {
+
+    min-height: 100vh;
+
+    min-height: 100dvh;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--text);
+
+    overflow-x: hidden;
+
 }
-.link a{
-    color:#00d2ff;
-    text-decoration:none;
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.background {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    overflow: hidden;
+
 }
-.link a:hover{text-decoration:underline;}
 
-/* ===== COMMON ===== */
-        body{
-          margin:0;
-          font-family:Arial, sans-serif;
-          background:#0e1218;
-          color:white;
-        }
 
-        button{
-          min-height:38px;
-          font-size:14px;
-          border-radius:10px;
-        }
+.background::before {
 
-        input,select,textarea{
-          border-radius:10px;
-          padding:8px;
-          font-size:14px;
-        }
+    content: "";
 
-        #map{
-          width:100%;
-          height:100vh;
-        }
+    position: absolute;
 
-        .topbar{
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          padding:10px;
-          background:#0b0f14;
-          box-shadow:0 0 10px rgba(0,255,255,.3);
-        }
+    width: 650px;
 
-        .title{font-size:16px;font-weight:700;}
+    height: 650px;
 
-        .user-avatar{
-          width:34px;height:34px;border-radius:50%;
-          background:#00ff99;display:flex;
-          align-items:center;justify-content:center;
-          color:black;font-weight:bold;
-        }
+    top: -350px;
 
-        #searchBox{width:260px;}
+    left: -250px;
 
-        .route-info{
-          background:#0b0f14;
-          padding:12px;border-radius:14px;
-          box-shadow:0 0 10px rgba(0,255,255,.3);
-          font-size:14px;
-        }
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,216,255,.10),
+            transparent 68%
+        );
 
-        .leaflet-popup-content{
-          max-height:250px;
-          overflow-y:auto;
-        }
+}
 
-        @media(max-width:768px){
-          .topbar{flex-wrap:wrap;text-align:center;gap:6px;}
-          .title{width:100%;font-size:14px;}
-          .top-actions{width:100%;display:flex;justify-content:center;gap:10px;}
-          #searchBox{width:85% !important;top:70px;}
-          .route-info{font-size:13px;max-width:90%;}
-          button{width:100%;}
-        }
 
-        @media(min-width:769px){
-          .topbar{padding:12px 30px;}
-          .title{font-size:18px;}
-          .route-info{font-size:15px;}
-          #searchBox{width:300px;}
-        }
+.background::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 650px;
+
+    height: 550px;
+
+    right: -300px;
+
+    bottom: -300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(39,132,255,.10),
+            transparent 68%
+        );
+
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid {
+
+    position: absolute;
+
+    inset: 0;
+
+    opacity: .17;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,.018) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.018) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        55px 55px;
+
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+
+    position: relative;
+
+    z-index: 2;
+
+    min-height: 100vh;
+
+    min-height: 100dvh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 25px;
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.register-layout {
+
+    width: min(960px, 100%);
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 430px;
+
+    gap: 90px;
+
+    align-items: center;
+
+}
+
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.brand-section {
+
+    display: block;
+
+}
+
+
+.brand-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+    color:
+        #001017;
+
+    font-size: 21px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,216,255,.18);
+
+}
+
+
+.brand-name {
+
+    font-size: 42px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    letter-spacing: -1.8px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.brand-description {
+
+    max-width: 420px;
+
+    color:
+        var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+}
+
+
+.brand-line {
+
+    width: 55px;
+
+    height: 3px;
+
+    margin-top: 24px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.features {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 13px;
+
+    margin-top: 32px;
+
+}
+
+
+.feature {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color:
+        #9ba7b6;
+
+    font-size: 12px;
+
+}
+
+
+.feature-icon {
+
+    width: 32px;
+
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(0,216,255,.06);
+
+    border:
+        1px solid
+        rgba(0,216,255,.1);
+
+    color:
+        var(--cyan);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   REGISTER CARD
+========================================================= */
+
+.register-card {
+
+    width: 100%;
+
+    padding: 31px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(13,19,28,.94);
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.38);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    animation:
+        cardEnter .6s
+        cubic-bezier(.2,.8,.2,1);
+
+}
+
+
+@keyframes cardEnter {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(18px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.card-header {
+
+    margin-bottom: 25px;
+
+}
+
+
+.card-header h1 {
+
+    font-size: 23px;
+
+    line-height: 1.25;
+
+    letter-spacing: -.5px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+
+}
+
+
+.card-header p {
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   FORM FIELD
+========================================================= */
+
+.field {
+
+    margin-bottom: 16px;
+
+}
+
+
+.field label {
+
+    display: block;
+
+    color:
+        #dce4ee;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+}
+
+
+.input-wrap {
+
+    position: relative;
+
+}
+
+
+.input-icon {
+
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        #617083;
+
+    font-size: 11px;
+
+    pointer-events: none;
+
+    transition: .2s;
+
+}
+
+
+input {
+
+    width: 100%;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid var(--border);
+
+    outline: none;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:
+        white;
+
+    padding:
+        0 42px;
+
+    font-family:
+        inherit;
+
+    font-size: 11px;
+
+    transition:
+        border .2s,
+        background .2s,
+        box-shadow .2s;
+
+}
+
+
+input::placeholder {
+
+    color:
+        #526073;
+
+}
+
+
+input:hover {
+
+    border-color:
+        rgba(255,255,255,.13);
+
+}
+
+
+input:focus {
+
+    background:
+        rgba(0,216,255,.025);
+
+    border-color:
+        var(--border-hover);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(0,216,255,.055);
+
+}
+
+
+.input-wrap:focus-within
+.input-icon {
+
+    color:
+        var(--cyan);
+
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+.password-toggle {
+
+    position: absolute;
+
+    right: 10px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 31px;
+
+    height: 31px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: none;
+
+    background: transparent;
+
+    color:
+        #667589;
+
+    cursor: pointer;
+
+}
+
+
+.password-toggle:hover {
+
+    color:
+        var(--cyan);
+
+}
+
+
+/* =========================================================
+   PASSWORD STRENGTH
+========================================================= */
+
+.password-strength {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 7px;
+
+}
+
+
+.strength-bar {
+
+    flex: 1;
+
+    height: 3px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    overflow: hidden;
+
+}
+
+
+.strength-fill {
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    transition:
+        width .25s,
+        background .25s;
+
+}
+
+
+.strength-text {
+
+    width: 45px;
+
+    text-align: right;
+
+    color:
+        #566477;
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   REGISTER BUTTON
+========================================================= */
+
+.register-button {
+
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+    color:
+        #001017;
+
+    font-family:
+        inherit;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+
+}
+
+
+.register-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0,216,255,.18);
+
+}
+
+
+.register-button:active {
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin:
+        22px 0 18px;
+
+}
+
+
+.divider span {
+
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        rgba(255,255,255,.065);
+
+}
+
+
+.divider small {
+
+    color:
+        #566477;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: .7px;
+
+}
+
+
+/* =========================================================
+   LOGIN LINK
+========================================================= */
+
+.login-link {
+
+    text-align: center;
+
+    color:
+        var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.login-link a {
+
+    color:
+        var(--cyan);
+
+    font-weight: 700;
+
+    margin-left: 4px;
+
+}
+
+
+.login-link a:hover {
+
+    text-decoration:
+        underline;
+
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 19px;
+
+    color:
+        #4f5d6e;
+
+    font-size: 8px;
+
+}
+
+
+.security i {
+
+    color:
+        var(--green);
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+
+    body {
+
+        overflow-y: auto;
+
+    }
+
+
+    .page {
+
+        padding:
+            20px 15px;
+
+    }
+
+
+    .register-layout {
+
+        display: block;
+
+        width: 100%;
+
+        max-width: 430px;
+
+    }
+
+
+    .brand-section {
+
+        text-align: center;
+
+        margin-bottom: 18px;
+
+    }
+
+
+    .brand-icon {
+
+        width: 47px;
+
+        height: 47px;
+
+        margin:
+            0 auto 10px;
+
+        border-radius: 14px;
+
+        font-size: 19px;
+
+    }
+
+
+    .brand-name {
+
+        font-size: 23px;
+
+        letter-spacing:
+            -.8px;
+
+        margin-bottom: 4px;
+
+    }
+
+
+    .brand-description {
+
+        display: none;
+
+    }
+
+
+    .brand-line {
+
+        display: none;
+
+    }
+
+
+    .features {
+
+        display: none;
+
+    }
+
+
+    .register-card {
+
+        padding:
+            25px 21px 23px;
+
+        border-radius: 20px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .page {
+
+        padding:
+            14px 12px;
+
+    }
+
+
+    .brand-section {
+
+        margin-bottom: 13px;
+
+    }
+
+
+    .brand-name {
+
+        font-size: 21px;
+
+    }
+
+
+    .register-card {
+
+        padding:
+            22px 18px 20px;
+
+    }
+
+
+    .card-header {
+
+        margin-bottom: 21px;
+
+    }
+
+
+    .card-header h1 {
+
+        font-size: 21px;
+
+    }
+
+
+    input {
+
+        height: 46px;
+
+    }
+
+
+    .register-button {
+
+        height: 46px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+
+    }
+
+}
 
 </style>
+
 </head>
+
+
 <body>
 
-<div class="shape one"></div>
-<div class="shape two"></div>
 
-<form method="POST">
-{% csrf_token %}
+<!-- =========================================================
+     BACKGROUND
+========================================================= -->
 
-<h3>Create PANDEL GO Account</h3>
+<div class="background">
 
-<input type="text" name="username" placeholder="Username" required>
-<input type="email" name="email" placeholder="Email" required>
-<input type="password" name="password" placeholder="Password" required>
+    <div class="grid"></div>
 
-<button type="submit">Register</button>
-
-<div class="link">
-Already have account? <a href="{% url 'login' %}">Login</a>
 </div>
 
-</form>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<main class="page">
+
+
+    <div class="register-layout">
+
+
+        <!-- =================================================
+             BRAND SECTION
+        ================================================== -->
+
+        <section class="brand-section">
+
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-gopuram"></i>
+
+            </div>
+
+
+            <div class="brand-name">
+                PANDEL GO
+            </div>
+
+
+            <p class="brand-description">
+
+                Create your account and start discovering
+                Kolkata's pandals, routes, food and
+                unforgettable Puja experiences.
+
+            </p>
+
+
+            <div class="brand-line"></div>
+
+
+            <div class="features">
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+                    Discover nearby pandals
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+
+                        <i class="fa-solid fa-route"></i>
+
+                    </div>
+
+                    Navigate with ease
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+
+                        <i class="fa-solid fa-robot"></i>
+
+                    </div>
+
+                    Get help from Pandel AI
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             REGISTER CARD
+        ================================================== -->
+
+        <form
+            method="POST"
+            class="register-card"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="card-header">
+
+                <h1>
+                    Create your account
+                </h1>
+
+                <p>
+                    Join Pandel Go and start your Puja journey.
+                </p>
+
+            </div>
+
+
+
+            <!-- USERNAME -->
+
+            <div class="field">
+
+                <label for="username">
+                    Username
+                </label>
+
+
+                <div class="input-wrap">
+
+                    <i
+                        class="fa-regular fa-user input-icon"
+                    ></i>
+
+
+                    <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        placeholder="Choose a username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="field">
+
+                <label for="email">
+                    Email address
+                </label>
+
+
+                <div class="input-wrap">
+
+                    <i
+                        class="fa-regular fa-envelope input-icon"
+                    ></i>
+
+
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PASSWORD -->
+
+            <div class="field">
+
+                <label for="password">
+                    Password
+                </label>
+
+
+                <div class="input-wrap">
+
+                    <i
+                        class="fa-solid fa-lock input-icon"
+                    ></i>
+
+
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword()"
+                        aria-label="Show password"
+                    >
+
+                        <i
+                            id="passwordIcon"
+                            class="fa-regular fa-eye"
+                        ></i>
+
+                    </button>
+
+                </div>
+
+
+                <!-- Strength -->
+
+                <div class="password-strength">
+
+                    <div class="strength-bar">
+
+                        <div
+                            id="strengthFill"
+                            class="strength-fill"
+                        ></div>
+
+                    </div>
+
+
+                    <span
+                        id="strengthText"
+                        class="strength-text"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- REGISTER -->
+
+            <button
+                type="submit"
+                class="register-button"
+            >
+
+                Create Pandel Go Account
+
+                <i
+                    class="fa-solid fa-arrow-right"
+                    style="margin-left:6px;"
+                ></i>
+
+            </button>
+
+
+
+            <!-- DIVIDER -->
+
+            <div class="divider">
+
+                <span></span>
+
+                <small>
+                    ALREADY A MEMBER?
+                </small>
+
+                <span></span>
+
+            </div>
+
+
+
+            <!-- LOGIN -->
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a
+                    href="{% url 'login' %}"
+                >
+                    Sign in
+                </a>
+
+            </div>
+
+
+
+            <!-- SECURITY -->
+
+            <div class="security">
+
+                <i
+                    class="fa-solid fa-shield-halved"
+                ></i>
+
+                Your account information is protected
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</main>
+
+
+
+<script>
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+function togglePassword() {
+
+    const input =
+        document.getElementById(
+            "password"
+        );
+
+
+    const icon =
+        document.getElementById(
+            "passwordIcon"
+        );
+
+
+    if (
+        input.type === "password"
+    ) {
+
+        input.type = "text";
+
+
+        icon.classList.remove(
+            "fa-eye"
+        );
+
+        icon.classList.remove(
+            "fa-regular"
+        );
+
+
+        icon.classList.add(
+            "fa-eye-slash"
+        );
+
+        icon.classList.add(
+            "fa-solid"
+        );
+
+    }
+
+    else {
+
+        input.type = "password";
+
+
+        icon.classList.remove(
+            "fa-eye-slash"
+        );
+
+        icon.classList.remove(
+            "fa-solid"
+        );
+
+
+        icon.classList.add(
+            "fa-eye"
+        );
+
+        icon.classList.add(
+            "fa-regular"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PASSWORD STRENGTH
+========================================================= */
+
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
+
+
+const strengthFill =
+    document.getElementById(
+        "strengthFill"
+    );
+
+
+const strengthText =
+    document.getElementById(
+        "strengthText"
+    );
+
+
+passwordInput.addEventListener(
+    "input",
+    function() {
+
+        const value =
+            passwordInput.value;
+
+
+        let score = 0;
+
+
+        if (
+            value.length >= 8
+        ) {
+            score++;
+        }
+
+
+        if (
+            /[A-Z]/.test(value)
+        ) {
+            score++;
+        }
+
+
+        if (
+            /[0-9]/.test(value)
+        ) {
+            score++;
+        }
+
+
+        if (
+            /[^A-Za-z0-9]/.test(value)
+        ) {
+            score++;
+        }
+
+
+        const widths = [
+            "0%",
+            "25%",
+            "50%",
+            "75%",
+            "100%"
+        ];
+
+
+        strengthFill.style.width =
+            widths[score];
+
+
+        if (!value) {
+
+            strengthText.textContent =
+                "—";
+
+            strengthFill.style.background =
+                "transparent";
+
+            return;
+
+        }
+
+
+        if (score <= 1) {
+
+            strengthText.textContent =
+                "Weak";
+
+            strengthText.style.color =
+                "#ff6675";
+
+            strengthFill.style.background =
+                "#ff6675";
+
+        }
+
+        else if (score === 2) {
+
+            strengthText.textContent =
+                "Fair";
+
+            strengthText.style.color =
+                "#ffc857";
+
+            strengthFill.style.background =
+                "#ffc857";
+
+        }
+
+        else if (score === 3) {
+
+            strengthText.textContent =
+                "Good";
+
+            strengthText.style.color =
+                "#00d9ff";
+
+            strengthFill.style.background =
+                "#00d9ff";
+
+        }
+
+        else {
+
+            strengthText.textContent =
+                "Strong";
+
+            strengthText.style.color =
+                "#00e89a";
+
+            strengthFill.style.background =
+                "#00e89a";
+
+        }
+
+    }
+);
+
+</script>
+
 
 </body>
+
 </html>
